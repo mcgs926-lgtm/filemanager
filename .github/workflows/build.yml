@@ -1,0 +1,18 @@
+name: Build APK
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pip build-essential git python3-dev ffmpeg libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev zlib1g-dev openjdk-17-jdk unzip
+          pip3 install --upgrade buildozer cython
+      - name: Build APK
+        run: buildozer android debug
+      - uses: actions/upload-artifact@v4
+        with:
+          name: app-apk
+          path: bin/*.apk
